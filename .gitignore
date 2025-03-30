@@ -1,0 +1,7 @@
+./nbs
+.env
+.env.compose
+.env.local
+.env.production
+.env.development
+.env.test
