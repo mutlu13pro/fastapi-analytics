@@ -8,6 +8,7 @@ app.include_router(events_router, prefix="/api/events")
 # TODO: REST API
 # api/eventss
 
+
 @app.get("/")
 def read_root():
     return {"message": "Hello Worlde"}
