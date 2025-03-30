@@ -1,24 +1,41 @@
+# Servisler tanımlanıyor
 services:
+  # 'app' adında bir servis oluşturuluyor
   app:
+    # Kullanılacak Docker image'ı belirleniyor
     image: analytics-api:v1
+    # İşletim sistemi platformu belirleniyor
     platform: linux/amd64
+    # Build ayarları tanımlanıyor
     build:
+      # Build bağlamı mevcut dizin olarak ayarlanıyor
       context: .
+      # Kullanılacak Dockerfile belirleniyor
       dockerfile: Dockerfile.web
+    # Ortam değişkenleri tanımlanıyor
     environment:
       - PORT=8002
+    # Çevresel değişkenler dosyası belirtiliyor
     env_file:
       - .env
+    # Port yönlendirmesi yapılıyor (host:container)
     ports:
       - "8080:8002"
+    # Uygulamanın başlatılma komutu belirleniyor
     command: uvicorn main:app --host 0.0.0.0 --port 8002 --reload
+    # Volume bağlantıları tanımlanıyor (kaynak:hedef:mod)
     volumes:
       - ./src:/code:rw
+    # Geliştirme modu ayarları
     develop:
+      # Dosya değişikliklerini izleme ayarları
       watch:
+        # Kök dizindeki değişikliklerde yeniden build
         - action: rebuild
-          path: .
+          path: compose.yml
+        # Dockerfile'daki değişikliklerde yeniden build
         - action: rebuild
           path: Dockerfile.web
+        # requirements.txt'deki değişikliklerde yeniden build
         - action: rebuild
           path: requirements.txt
