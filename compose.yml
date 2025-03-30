@@ -13,11 +13,12 @@ services:
       # Kullanılacak Dockerfile belirleniyor
       dockerfile: Dockerfile.web
     # Ortam değişkenleri tanımlanıyor
-    environment:
-      - PORT=8002
+    # environment:
+    #   - PORT=8002
+    #   - DATABASE_URL=postgresql+pscopg://mutlu:sanane@db_services:5432/db
     # Çevresel değişkenler dosyası belirtiliyor
     env_file:
-      - .env
+      - .env.compose
     # Port yönlendirmesi yapılıyor (host:container)
     ports:
       - "8080:8002"
@@ -39,3 +40,20 @@ services:
         # requirements.txt'deki değişikliklerde yeniden build
         - action: rebuild
           path: requirements.txt
+  # postgressql+pscopg://mutlu:sanane@db:5432/db
+  db_services:
+    image: timescale/timescaledb:latest-pg17
+    environment:
+      - POSTGRES_USER=mutlu
+      - POSTGRES_PASSWORD=sanane
+      - POSTGRES_DB=db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+
+volumes:
+  db_data:
+      
